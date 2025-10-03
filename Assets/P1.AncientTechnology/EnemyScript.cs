@@ -1,6 +1,5 @@
-using System;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 public class EnemyScript : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -8,13 +7,13 @@ public class EnemyScript : MonoBehaviour
     public int Countdown = 20;
     public int atk = 10;
     public GameObject Player;
-    
+
     public GameObject GameManager;
     public bool entity = false;
     public bool calamity = true;
     public bool enemy = false;
 
-    public List< GameObject > Temples;
+    public List<GameObject> Temples;
 
 
     public GameObject MayanSunGodTrapTemple;
@@ -23,10 +22,10 @@ public class EnemyScript : MonoBehaviour
     public GameObject ScrollsOfInventionAndStrategy;
     public GameObject TabletsOfArchitecture;
 
-    public bool EnemyBP=false;
+    public bool EnemyBP = false;
     void Start()
     {
-        if (entity==calamity) { entity = calamity; }
+        if (entity == calamity) { entity = calamity; }
         else { entity = enemy; }
         //if random int is odd, become Monster (red). If even, become Calamity (Black). NOTE: default is enemy so far.
 
@@ -34,22 +33,22 @@ public class EnemyScript : MonoBehaviour
         //Fornow: manually add them
         Temples.Add(MayanSunGodTrapTemple);
         Temples.Add(LibraryOfAlexandria);
-        Temples.Add (TheOracle);
+        Temples.Add(TheOracle);
         Temples.Add(ScrollsOfInventionAndStrategy);
         Temples.Add(TabletsOfArchitecture);
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (hp<=0|| Countdown <= 0) { Destroy(gameObject); }
+        if (hp <= 0 || Countdown <= 0) { Destroy(gameObject); }
         if (entity == enemy) { };
-        if (entity== calamity) { };
+        if (entity == calamity) { };
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)|| Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Alpha3)
-            || Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Alpha5) &&EnemyBP==false)
-        {            
+        if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Alpha3)
+            || Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Alpha5) && EnemyBP == false)
+        {
             GameObject chosen = Temples[UnityEngine.Random.Range(0, Temples.Count)];
             Temples.Remove(chosen);
             Destroy(chosen.gameObject);
@@ -75,8 +74,9 @@ public class EnemyScript : MonoBehaviour
         };
         if (hp <= 0 || Countdown <= 0) { Destroy(gameObject); } //the win condition. entity gone
 
-        if (EnemyBP == true) {
-            
+        if (EnemyBP == true)
+        {
+
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 //combines both Find and Get Component. returns first 

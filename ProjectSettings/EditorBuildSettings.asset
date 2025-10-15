@@ -24,7 +24,7 @@ EditorBuildSettings:
     path: Assets/P5.TimeLoop/PrototypeFiveMain.unity
     guid: 0ee46fc9f6f294c94a5324b6b66233b9
   - enabled: 1
-    path: Assets/Prototype 6/PrototypeSixMain.unity
+    path: Assets/P6.OneEnemyOnly/PrototypeSixMain.unity
     guid: 2acce0291c11b4b3897e2ca7989e28c3
   - enabled: 1
     path: Assets/Prototype 7/PrototypeSevenMain.unity

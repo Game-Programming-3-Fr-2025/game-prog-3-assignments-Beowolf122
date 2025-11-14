@@ -1,49 +1,105 @@
-using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-    //singleton (ask what that means)
+    // Singleton
     public static GameManager instance;
-    public Transform[] spawnpoints;
+    public Transform[] spawnPoints;
 
-    public List<PlayerController> players; //list of active players that joined the game
+    // List of active player that join the game
+    public List<PlayerController> players;
 
-    public GamePhase phase = GamePhase.starting; //State machine variable to orchestrate the game loop
+    // State machine variable to orchestrate the game loop
+    public GamePhase phase = GamePhase.starting;
 
     public Timer timer;
 
-    public PlayerController victor; //player who has won;
+    // The Player who has won the round
+    public PlayerController victor;
+
     public void Awake()
     {
-        if (instance != null) //singleton initialization
+        // Singleton initialization
+        if (instance != null)
         {
             Destroy(gameObject);
             return;
         }
         instance = this;
 
-        //timer.enabled=false;//disable timer until all player joins
+        // Disable timer script until all players join
+        timer.enabled = false;
     }
-    public void OnPlayerJoined(PlayerInput input) //Message that listens to PlayerInputManager, running when a player joins
+
+    // A Message that listens to the PlayerInputManager runs when a player joins
+    public void OnPlayerJoined(PlayerInput input)
     {
-        Transform nextSpawnPosition = spawnpoints[players.Count];
+        // Using the amount of joined players select the next spawn position
+        Transform nextSpawnPosition = spawnPoints[players.Count];
+        // Move player to their spawn position
+        input.transform.position = nextSpawnPosition.position;
+        // Add the player to the joined players list
+        players.Add(input.GetComponent<PlayerController>());
+        // If all players have joined, start the timer
+        if (players.Count == 2)
+            timer.enabled = true;
     }
-    public void KillAll() //Used by timer to end the game if no one jumps in time
-    { }
-   /* public bool CanPlayerJump() //only one player can jump per round
-    { }*/
-    public void OnPlayerJumped(PlayerController player) //when player jumps, run this and end the round
-    { }
-   /* public IEnumerator EndRound() //used to end the game regardless of outcome and resets
-    { }*/
-    public enum GamePhase
+
+    // Used by the timer to end the game if nobody jumps in time
+    public void KillAll()
     {
-        starting,
-        started,
-        ending
+        // Loop through the players and tell them to die
+        foreach (PlayerController player in players)
+        {
+            player.Die();
+        }
+        // End the round
+        StartCoroutine(EndRound());
     }
+
+    // Only one player can jump per round & only if the game has started
+    public bool CanPlayerJump()
+    {
+        return victor == null && phase == GamePhase.started;
+    }
+
+    // If the player can jump we call this function and end the round
+    public void OnPlayerJumped(PlayerController player)
+    {
+        // Save the jumping player as the victor
+        victor = player;
+        // Kill the other player
+        players.Find((p) => p != victor).Die();
+        // End the round
+        StartCoroutine(EndRound());
+    }
+
+    // Used by both round outcomes to end & reset the game
+    public IEnumerator EndRound()
+    {
+        // Start the ending phase (pauses timer) & prevents jumping
+        phase = GamePhase.ending;
+        // Give the players time to Jump & Die
+        yield return new WaitForSeconds(3);
+        // Start resetting the game
+        phase = GamePhase.starting;
+        // Reset timer
+        timer.CountDown();
+        // Clear victor and reset the players
+        victor = null;
+        for (int i = 0; i < players.Count; i++)
+        {
+            players[i].Revive(spawnPoints[i].position);
+        }
+    }
+}
+
+public enum GamePhase
+{
+    starting,
+    started,
+    ending
 }

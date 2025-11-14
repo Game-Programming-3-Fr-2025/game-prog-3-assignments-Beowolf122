@@ -6,9 +6,11 @@ public class NinjaPlayerScript : MonoBehaviour
     public float Speed = 5;
     public int ninjahp = 10;
     public Vector3 vel; //used to store the gameobject's literal velocity. It's current velocity
-    public GameObject rangeRadius;
     Rigidbody2D rb;
 
+
+    public float detectionRadius = 3f;
+    public LayerMask targetLayers; // Specify which layers to detect
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -19,9 +21,9 @@ public class NinjaPlayerScript : MonoBehaviour
     void Update()
     {
         if (ninjahp <= 0) { Destroy(gameObject); }
-
+       
+        { 
         rb.linearVelocity = vel;
-
         float desiredX; //what the current velocity should lerp to
 
         //If we're hitting keys we move in that direction
@@ -75,21 +77,30 @@ public class NinjaPlayerScript : MonoBehaviour
             pos.y = -5f;
         }
         transform.position = pos;
+            } //movement code
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius, targetLayers);
+        Collider2D closestcollider; //the label to the closest collider
+        float lastdistance= float.MaxValue; //The link to the "closest distance". always going to be true for the first object until switched. 
 
-        //Ontrigger stay stuff;
+        foreach (var hitCollider in hitColliders)
+        {
+            Debug.Log("Detected object within range: " + hitCollider.gameObject.name);
+            float distance = Vector2.Distance(hitCollider.transform.position, gameObject.transform.position);
+            if (distance < lastdistance) //in going through each of them, if the current last distance is closer than the next one
+            {
+                lastdistance = distance; //set that object to the closest distance
+                closestcollider = hitCollider; //the label, closest collider, is set to that object which is the closest at the moment
+            }
+        }
+        //Parry= up+right/left. Knocks away the object if light, if heavy, both player and object will be displaced
+        //DodgeCounter= Down+right/left. Turns off boxcollider for a second and
+        //if player's direction matches the object, launch a dash attack (destroy object, teleport "forward")
+        //if player's directional inputs don't match the object's direction: backs away from the object, and applies force to the object
 
-
-        //upon object in trigger area, check all objects around the player and select the closest one (marked as "chosen")
-        //maybe also check the enemy tagging
         //if chosen's X is more than the players, pressing downright will destroy object+dash/teleport
         //if less than X, same but down left.
         //if difference of X value of the object is +- 1 , press only down.
 
-        //future ideas: parryable objects
-        //some objects cant be destroyed if sturdy/large enough.
-        //in that case, press up to parry. up left will add force to the left, up right will add force to right
-
-        //maybe keybind for up/down too? 
 
     }
 

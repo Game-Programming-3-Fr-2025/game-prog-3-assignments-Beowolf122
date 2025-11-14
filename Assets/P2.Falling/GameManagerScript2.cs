@@ -49,10 +49,5 @@ public class GameManagerScript2 : MonoBehaviour
         //future ideas: add a combo meter that can be displayed when parrying/destroying.
         //and differing win conditions in doc. and sfx/visuals
     }
-    //what doesn't work rn: 1.) player can't move
-    //hazards can't move upwards nor rotate
-    //size isn't changing randomly as its supposed to
-    //object isn't spawning randomly between 1&2
-    //might be related but: hazard script has error message on game reference
 
 }

@@ -10,14 +10,19 @@ public class HazardScript : MonoBehaviour
     public bool counterclockwise = true;
     public int rotatspd;
 
+    public float objectdamage;
+    public bool heavyobject;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         gameManagerScript2 = FindFirstObjectByType<GameManagerScript2>();
 
         //randomize and change object size
-        float objectsize = Random.Range(1, 3);
+        int objectsize = Random.Range(1, 4);
         transform.localScale = new Vector3(transform.localScale.x * objectsize, transform.localScale.y * objectsize, 1);
+        if (objectsize >= 2) { heavyobject = true; }
+        else { heavyobject = false; }
 
         //randomize and change object rotation direction
         if (Random.Range(1, 3) == 1) { counterclockwise = true; }
@@ -30,7 +35,8 @@ public class HazardScript : MonoBehaviour
     void Update()
     {
         //object is moving "upwards" while falling, speed based on the GameManager's "velocity".
-        rb.linearVelocityY += (gameManagerScript2.velocity * gameManagerScript2.velocity / 10) * Time.deltaTime;
+        rb.linearVelocityY += (gameManagerScript2.velocity * gameManagerScript2.velocity / 10) * Time.deltaTime; //NOTE: Transition to ADDFORCE
+
         if (transform.position.y > 6) { Destroy(gameObject); }
 
         //either rotate in one direction or rotate in another direction
@@ -45,6 +51,7 @@ public class HazardScript : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             NinjaPlayerScript ninjaPlayerScript = FindFirstObjectByType<NinjaPlayerScript>();
+            if (gameObject.transform.localScale.y == 2) { ninjaPlayerScript.ninjahp -= 1; }
             ninjaPlayerScript.ninjahp -= 1;
         }
         Destroy(gameObject);

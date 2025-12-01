@@ -19,7 +19,7 @@ public class HazardScript : MonoBehaviour
         gameManagerScript2 = FindFirstObjectByType<GameManagerScript2>();
 
         //randomize and change object size
-        int objectsize = Random.Range(1, 4);
+        int objectsize = Random.Range(1, 3);
         transform.localScale = new Vector3(transform.localScale.x * objectsize, transform.localScale.y * objectsize, 1);
         if (objectsize >= 2) { heavyobject = true; }
         else { heavyobject = false; }
@@ -53,8 +53,9 @@ public class HazardScript : MonoBehaviour
             NinjaPlayerScript ninjaPlayerScript = FindFirstObjectByType<NinjaPlayerScript>();
             if (gameObject.transform.localScale.y == 2) { ninjaPlayerScript.ninjahp -= 1; }
             ninjaPlayerScript.ninjahp -= 1;
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
+        
     }
 
 }

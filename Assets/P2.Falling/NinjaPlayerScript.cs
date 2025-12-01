@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class NinjaPlayerScript : MonoBehaviour
@@ -7,7 +8,7 @@ public class NinjaPlayerScript : MonoBehaviour
     public int ninjahp = 10;
     public Vector3 vel; //used to store the gameobject's literal velocity. It's current velocity
     Rigidbody2D rb;
-
+    GameManagerScript2 gamemanager;
     
 
     public float detectionRadius = 3f;
@@ -15,6 +16,7 @@ public class NinjaPlayerScript : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        gamemanager = FindFirstObjectByType<GameManagerScript2>();
     }
 
     // Update is called once per frame
@@ -78,15 +80,14 @@ public class NinjaPlayerScript : MonoBehaviour
             }
             transform.position = pos;
         } //movement code
+
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius, targetLayers);
         Collider2D closestcollider = null; //the label to the closest collider
         float lastdistance = float.MaxValue; //The link to the "closest distance". always going to be true for the first object until switched. 
-
         foreach (var hitCollider in hitColliders)
         {
             Debug.Log("Detected object within range: " + hitCollider.gameObject.name);
             float distance = Vector2.Distance(hitCollider.transform.position, gameObject.transform.position);
-            Vector2 Directions = new Vector2();
 
             if (distance < lastdistance) //in going through each of them, if the current last distance is closer than the next one
             {
@@ -94,27 +95,35 @@ public class NinjaPlayerScript : MonoBehaviour
                 closestcollider = hitCollider; //the label, closest collider, is set to that object which is the closest at the moment
             }
         }
+
         if (closestcollider != null)
         {
             //dodge code:
-            if (Input.GetKeyDown(KeyCode.DownArrow) && Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+            if (Input.GetKey(KeyCode.RightShift)|| Input.GetKey(KeyCode.LeftShift))
             {
                 //gameObject.GetComponent<Collider>().enabled = false;
                 transform.position = closestcollider.transform.position;
                 Destroy(closestcollider.gameObject);
                 //gameObject.GetComponent<Collider>().enabled = true;
+                Debug.Log("dodge performed");
+                //possible issue of dodges/parry not performing right (teleport may not work, object may not get destroyed)
             }
             //Parry code:
-            if (Input.GetKeyDown(KeyCode.UpArrow) && Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+            if (Input.GetKey(KeyCode.Space))
             {
                 Vector2 direction = (closestcollider.transform.position - transform.position).normalized;
-                closestcollider.attachedRigidbody.AddForce(direction * 1000);//make sure to knock it away
+                closestcollider.attachedRigidbody.AddForce(direction * 2);//make sure to knock it away
+                Debug.Log("Parry Performed");
+            }
+            if (Input.GetKey(KeyCode.UpArrow)|| Input.GetKey(KeyCode.DownArrow)&& Input.GetKey(KeyCode.LeftArrow)|| Input.GetKey(KeyCode.RightArrow)) 
+            {
+                //Dash Attack
             }
         }
+        
     }
-
-
+    //3 moves: Dodge/Dodge Counter (shift), Dash Attack (up/down & right/left), Parry (Space)
         //Parry= up+right/left. Knocks away the object if light, if heavy, both player and object will be displaced
         //if object is light, dodge attack becomes a dash attack: teleports behind object and -depth,. If heavy, destroy the object and -velocity
-
+        //
     }

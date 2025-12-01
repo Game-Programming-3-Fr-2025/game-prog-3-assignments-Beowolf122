@@ -17,7 +17,7 @@ public class DepthText : MonoBehaviour
     {
         //if (game.maxdepth - game.depth >= 500)
         {
-            DepthTextbox.text = "Depth:" + game.depth + "m";
+            DepthTextbox.text = "Depth:" + Mathf.Ceil(game.depth)+ "m";
         }
         
 /*        if (game.maxdepth - game.depth <= 500)

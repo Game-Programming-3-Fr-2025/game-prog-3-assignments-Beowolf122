@@ -787,10 +787,13 @@ MonoBehaviour:
   Speed: 5
   ninjahp: 10
   vel: {x: 0, y: 0, z: 0}
-  detectionRadius: 3
+  SpecialmaxCD: 1
+  SpecialCD: 1
+  Dodgestance: 0
+  detectionRadius: 2
   targetLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
 --- !u!1 &1446211188
 GameObject:
   m_ObjectHideFlags: 0
@@ -1224,6 +1227,10 @@ PrefabInstance:
     - target: {fileID: 6691765492708913672, guid: fc5147b4808a9f94496d2ea82c1b0306, type: 3}
       propertyPath: m_Name
       value: Wooden Plank
+      objectReference: {fileID: 0}
+    - target: {fileID: 6691765492708913672, guid: fc5147b4808a9f94496d2ea82c1b0306, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7630745265446308215, guid: fc5147b4808a9f94496d2ea82c1b0306, type: 3}
       propertyPath: m_LocalPosition.x

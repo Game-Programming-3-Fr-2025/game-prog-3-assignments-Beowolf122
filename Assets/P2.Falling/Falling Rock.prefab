@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6123275305669292432}
   - component: {fileID: 4582492697753258520}
   - component: {fileID: 6803574166574761604}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Falling Rock
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -179,3 +179,5 @@ MonoBehaviour:
   rotation: 0
   counterclockwise: 1
   rotatspd: 0
+  objectdamage: 0
+  heavyobject: 0

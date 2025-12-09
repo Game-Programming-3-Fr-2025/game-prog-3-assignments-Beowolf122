@@ -35,9 +35,9 @@ public class HazardScript : MonoBehaviour
     void Update()
     {
         //object is moving "upwards" while falling, speed based on the GameManager's "velocity".
-        rb.linearVelocityY += (gameManagerScript2.velocity * gameManagerScript2.velocity / 10) * Time.deltaTime; //NOTE: Transition to ADDFORCE
-
-        if (transform.position.y > 6) { Destroy(gameObject); }
+        rb.AddForceY(gameManagerScript2.velocity);
+        //Addrelativeforce takes into account rotation
+        if (transform.position.y > 6 || transform.position.y < -10 ||transform.position.x<-10||transform.position.x>10) { Destroy(gameObject); }
 
         //either rotate in one direction or rotate in another direction
         if (counterclockwise == true) { rotation += 3 * rotatspd; }
@@ -50,9 +50,13 @@ public class HazardScript : MonoBehaviour
         //if colliding with player, check the tag of the object of player, player -1 hp, destroy object
         if (other.gameObject.CompareTag("Player"))
         {
+            
             NinjaPlayerScript ninjaPlayerScript = FindFirstObjectByType<NinjaPlayerScript>();
             if (gameObject.transform.localScale.y == 2) { ninjaPlayerScript.ninjahp -= 1; }
             ninjaPlayerScript.ninjahp -= 1;
+            other.gameObject.GetComponent<Rigidbody2D>();
+            Vector2 direction = (other.transform.position - transform.position).normalized;
+            other.rigidbody.AddForce(direction);
             Destroy(gameObject);
         }
         

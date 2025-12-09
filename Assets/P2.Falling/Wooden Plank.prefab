@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1619950967689804571}
   - component: {fileID: 508218968284262400}
   - component: {fileID: 5710834172429214780}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wooden Plank
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -179,3 +179,5 @@ MonoBehaviour:
   rotation: 0
   counterclockwise: 1
   rotatspd: 0
+  objectdamage: 0
+  heavyobject: 0

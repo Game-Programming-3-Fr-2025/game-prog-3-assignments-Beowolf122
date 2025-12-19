@@ -61,19 +61,19 @@ public class NinjaPlayerScript : MonoBehaviour
                                     vel.y = Mathf.Lerp(vel.y, desiredY, 0.3f);*/
 
             if (Input.GetKeyDown(KeyCode.LeftArrow)) { rb.linearVelocityX = -Speed; }
-            if (Input.GetKey(KeyCode.LeftArrow)) { rb.AddForceX(-Speed); }
+            if (Input.GetKey(KeyCode.LeftArrow)) { rb.AddForceX(-Speed * Time.deltaTime); }
             if (Input.GetKeyUp(KeyCode.LeftArrow)) { rb.linearVelocityX = 0; }
 
             if (Input.GetKeyDown(KeyCode.RightArrow)) { rb.linearVelocityX = Speed; }
-            if (Input.GetKey(KeyCode.RightArrow)) { rb.AddForceX(Speed); }
+            if (Input.GetKey(KeyCode.RightArrow)) { rb.AddForceX(Speed * Time.deltaTime); }
             if (Input.GetKeyUp(KeyCode.RightArrow)) { rb.linearVelocityX = 0; }
 
             if (Input.GetKeyDown(KeyCode.DownArrow)) { rb.linearVelocityY = -Speed; }
-            if (Input.GetKey(KeyCode.DownArrow)) { rb.AddForceY(-Speed); }
+            if (Input.GetKey(KeyCode.DownArrow)) { rb.AddForceY(-Speed * Time.deltaTime); }
             if (Input.GetKeyUp(KeyCode.DownArrow)) { rb.linearVelocityY = 0; }
 
             if (Input.GetKeyDown(KeyCode.UpArrow)) { rb.linearVelocityY = Speed; }
-            if (Input.GetKey(KeyCode.UpArrow)) { rb.AddForceY(Speed); }
+            if (Input.GetKey(KeyCode.UpArrow)) { rb.AddForceY(Speed * Time.deltaTime); }
             if (Input.GetKeyUp(KeyCode.UpArrow)) { rb.linearVelocityY = 0; }
 
             //stop player from going out of bounds
@@ -122,25 +122,33 @@ public class NinjaPlayerScript : MonoBehaviour
             {
                 Dodgestance = true;
                 //gives 2 combo? One for dodge, one for counter
+                gamemanager.combometer += 1;
+                Vector2 direction = (closestcollider.transform.position - transform.position).normalized;
+                rb.AddForce(-direction*100);
+                SpecialCD=SpecialmaxCD;
             }
             
             //Parry code:
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 Vector2 direction = (closestcollider.transform.position - transform.position).normalized;
-                closestcollider.attachedRigidbody.AddForce(direction * 20);//make sure to knock it away
-                rb.AddForce(-direction);
+                closestcollider.attachedRigidbody.AddForce(direction * 2000);//make sure to knock it away
+                rb.AddForce(-direction*100);
+                gamemanager.combometer += 1;
                 Debug.Log("Parry Performed");
+                SpecialCD = SpecialmaxCD;
                 //gives 1 combo
             }
             if (Input.GetKey(KeyCode.UpArrow)|| Input.GetKey(KeyCode.DownArrow)&& Input.GetKey(KeyCode.LeftArrow)|| Input.GetKey(KeyCode.RightArrow)) 
             {
                 //Dash Attack. Shud give 1 combo
                 closestcollider.gameObject.SetActive(false);
-                transform.position = closestcollider.transform.position;
+                Vector2 direction = (closestcollider.transform.position - transform.position).normalized;
+                rb.AddForce(direction);
                 Destroy(closestcollider.gameObject);
+                gamemanager.combometer += 1;
+                SpecialCD = SpecialmaxCD;
             }
-            SpecialCD=SpecialmaxCD;
         }
 
 
@@ -152,6 +160,7 @@ public class NinjaPlayerScript : MonoBehaviour
             Destroy(closestcollider.gameObject);
             Debug.Log("dodge performed");
             Dodgestance = false;
+            gamemanager.combometer += 1;
 
         }
     }

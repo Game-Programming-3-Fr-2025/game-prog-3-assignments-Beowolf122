@@ -12,6 +12,8 @@ public class GameManagerScript2 : MonoBehaviour
     public GameObject Stone;
     public GameObject Plank;
     public float spawntimer = 4;
+
+    public float combometer = 0;
     void Start()
     {
 
@@ -36,18 +38,36 @@ public class GameManagerScript2 : MonoBehaviour
         spawntimer -= Time.deltaTime * velocity / 10;
         if (spawntimer < 0)
         {
-            int B = Random.Range(-7, 8);
+            SpawnHazard();
+/*            int B = Random.Range(-7, 8);
             Vector3 Xspawner = new Vector3(B, -6, 0);
             if (Random.Range(1, 3) == 1) //random range always cuts off the 2nd number
             {
                 Instantiate(Stone, transform.position = Xspawner, Quaternion.identity);
             }// maybe make the rotation randomized
             else { Instantiate(Plank, transform.position = Xspawner, Quaternion.identity); }
-            spawntimer = 3; //reset the timer
+            spawntimer = 3; //reset the timer*/
         }
 
         //future ideas: add a combo meter that can be displayed when parrying/destroying.
         //and differing win conditions in doc. and sfx/visuals
-    }
 
+        if (combometer > 4)
+        {
+            combometer-=Time.deltaTime;
+            spawntimer -= combometer *Time.deltaTime;
+        }
+
+    }
+    private void SpawnHazard()
+    {
+        int B = Random.Range(-7, 8);
+        Vector3 Xspawner = new Vector3(B, -6, 0);
+        if (Random.Range(1, 3) == 1) //random range always cuts off the 2nd number
+        {
+            Instantiate(Stone, transform.position = Xspawner, Quaternion.identity);
+        }// maybe make the rotation randomized
+        else { Instantiate(Plank, transform.position = Xspawner, Quaternion.identity); }
+        spawntimer = 3; //reset the timer
+    }
 }

@@ -35,13 +35,13 @@ public class HazardScript : MonoBehaviour
     void Update()
     {
         //object is moving "upwards" while falling, speed based on the GameManager's "velocity".
-        rb.AddForceY(gameManagerScript2.velocity);
+        rb.AddForceY(gameManagerScript2.velocity*Time.deltaTime*3);
         //Addrelativeforce takes into account rotation
         if (transform.position.y > 6 || transform.position.y < -10 ||transform.position.x<-10||transform.position.x>10) { Destroy(gameObject); }
 
         //either rotate in one direction or rotate in another direction
-        if (counterclockwise == true) { rotation += 3 * rotatspd; }
-        else { rotation -= 3 * rotatspd; }
+        if (counterclockwise == true) { rotation += 3 * rotatspd * Time.deltaTime; }
+        else { rotation -= 3 * rotatspd * Time.deltaTime; }
         transform.rotation = Quaternion.Euler(0, 0, rotation);
 
     }
@@ -50,7 +50,7 @@ public class HazardScript : MonoBehaviour
         //if colliding with player, check the tag of the object of player, player -1 hp, destroy object
         if (other.gameObject.CompareTag("Player"))
         {
-            
+            gameManagerScript2.combometer = 0;
             NinjaPlayerScript ninjaPlayerScript = FindFirstObjectByType<NinjaPlayerScript>();
             if (gameObject.transform.localScale.y == 2) { ninjaPlayerScript.ninjahp -= 1; }
             ninjaPlayerScript.ninjahp -= 1;

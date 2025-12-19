@@ -15,15 +15,17 @@ public class DepthText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (game.maxdepth - game.depth >= 500)
+        if (game.depth < game.maxdepth)
         {
-            DepthTextbox.text = "Depth:" + Mathf.Ceil(game.depth)+ "m";
+            DepthTextbox.text = "Depth:" + Mathf.Ceil(game.depth) + "m";
         }
-        
-/*        if (game.maxdepth - game.depth <= 500)
-        { 
-            DepthTextbox.text= "Depth:"+ "<color=\"red\">game.depth</color>";
-        }*/
+        else { DepthTextbox.text = "You win!"  }
+
+
+        /*        if (game.maxdepth - game.depth <= 500)
+                { 
+                    DepthTextbox.text= "Depth:"+ "<color=\"red\">game.depth</color>";
+                }*/
 
     }
 }

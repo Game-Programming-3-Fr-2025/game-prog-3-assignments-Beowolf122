@@ -646,13 +646,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b0b5c4d4f1d80142a020e4bda62f916, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 5
-  ninjahp: 3
+  Speed: 3
+  ninjahp: 5
   vel: {x: 0, y: 0, z: 0}
   SpecialmaxCD: 1
   SpecialCD: 1
   Dodgestance: 0
-  detectionRadius: 2
+  detectionRadius: 1.5
   targetLayers:
     serializedVersion: 2
     m_Bits: 8

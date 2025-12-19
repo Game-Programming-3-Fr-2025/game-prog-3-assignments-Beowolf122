@@ -138,6 +138,10 @@ public class NinjaPlayerScript : MonoBehaviour
                 Debug.Log("Parry Performed");
                 SpecialCD = SpecialmaxCD;
                 //gives 1 combo
+                if (gamemanager.combometer > 10)
+                {
+                    ninjahp += 1;
+                }
             }
             if (Input.GetKey(KeyCode.UpArrow)|| Input.GetKey(KeyCode.DownArrow)&& Input.GetKey(KeyCode.LeftArrow)|| Input.GetKey(KeyCode.RightArrow)) 
             {
@@ -147,7 +151,12 @@ public class NinjaPlayerScript : MonoBehaviour
                 rb.AddForce(direction);
                 Destroy(closestcollider.gameObject);
                 gamemanager.combometer += 1;
+                gamemanager.depth -= 10;
                 SpecialCD = SpecialmaxCD;
+                if (gamemanager.combometer > 10)
+                {
+                    gamemanager.maxvelocity += 10;
+                }
             }
         }
 
@@ -161,6 +170,10 @@ public class NinjaPlayerScript : MonoBehaviour
             Debug.Log("dodge performed");
             Dodgestance = false;
             gamemanager.combometer += 1;
+            if (gamemanager.combometer > 10)
+            {
+                gamemanager.depth -= gamemanager.combometer;
+            }
 
         }
     }
